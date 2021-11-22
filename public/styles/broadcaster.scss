@@ -1,0 +1,10 @@
+@use "globals" as *;
+
+.streamoptions {
+    width: 300px;
+
+    & div {
+        display: flex;
+        justify-content: space-between;
+    }
+}

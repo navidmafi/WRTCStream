@@ -1,0 +1,94 @@
+<!--
+
+                        ,////,
+                        /// 6|
+                        //  _|
+                       _/_,-'
+                  _.-/'/   \   ,/;,
+               ,-' /'  \_   \ / _/
+               `\ /     _/\  ` /
+                 |     /,  `\_/
+                 |     \'
+     /\_        /`      /\
+   /' /_``--.__/\  `,. /  \
+  |_/`  `-._     `\/  `\   `.
+            `-.__/'     `\   |
+                          `\  \
+                            `\ \
+                              \_\__
+                               \___)
+    
+    Davidamo davidam
+    man ye foozolo didam.... =D
+-->
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=M+PLUS+2:wght@100;200;300;400;700&display=swap"
+    rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/navidmafi/mycsslib@1.1/lib.css" />
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Viewer</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js"></script>
+  <link rel="stylesheet" href="styles/receiver.css">
+</head>
+
+<body class="nospacing">
+
+  <div id="intro" class="animation flex-both-center wd-100pr">
+    <div class="patterns">
+      <svg width="100vw" height="95%">
+
+     <text x="50%" y="60%"  text-anchor="middle"  >
+       JolTogether
+     </text>
+     </svg>
+    </div>
+  </div>
+
+  <div class="text-center">
+    <div class="hdrbar px-1r brad-10 py-05r">
+      <h1 class="tc-white nospacing">Joltogether Client<span class="fs-10r fw-400">® Dev v0.24</span> </h1>
+    </div>
+    <!--src="https://file-examples-com.github.io/uploads/2017/04/file_example_MP4_1280_10MG.mp4"-->
+    <video autoplay id='video'></video><br>
+    <div class="connection">
+      <div id="connectionloader" class="flex-both-center hidden">
+        <div class="loader"></div> 
+      <h3 class="tc-white mx-1r">Connecting...</h3>
+      </div> <br>
+      <button id="joinbutton" class="btn-join trans-100 bg-white noborder brad-5 px-1r py-05r fs-11r fw-400">Join
+        broadcast</button>
+    </div>
+
+  </div>
+  <div class="toolsbtm px-1r brad-10 py-05r">
+    <button id="reconnect" class="noborder bg-none tc-white nospacing"><span class="material-icons md-36">sync_problem</span></button>
+    <button id="30bwd" class="noborder bg-none tc-white nospacing"><span class="material-icons md-36">replay_30</span></button>
+    <button id="playbtn" class="noborder bg-none tc-white nospacing"><span class="material-icons md-36">play_arrow</span></button>
+    <button id="pausebtn" class="noborder bg-none tc-white nospacing"><span class="material-icons md-36">pause</span></button>
+    <button id="30fwd" class="noborder bg-none tc-white nospacing" disabled><span class="material-icons md-36">forward_30</span></button>
+    <button id="fullscreenbtn" class="noborder bg-none tc-white nospacing"><span class="material-icons md-36">aspect_ratio</span></button>
+  </div>
+  <footer class="nospacing text-center wd-100pr py-05r">This is a development build.</footer>
+  <div id="notif" class="notif brad-10 trans-200">
+    <div class="notif-icon flex-both-center"><span class="material-icons md-36">warning</span></div>
+    <div class="notif-content px-1r py-1r flex-vertical trans-200 text-left ">
+      <div class="notif-title"><span class="fw-400 fs-10r">Cannot connect to SFU Media Server</span></div>
+      <div class="notif-desc fs-08r"><span id="errordesc"></span></div>
+      <button id="notif-ignore" class="notif-dismiss noborder bg-none">
+        <span class="material-icons md-36">close</span>
+      </button>
+    </div>
+  </div>
+  <script src='./scripts/receiver.js'></script>
+
+</body>
+
+</html>

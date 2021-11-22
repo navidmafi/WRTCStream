@@ -1,0 +1,116 @@
+@use "colors" as *;
+@use "globals" as *;
+
+.toolsbtm {
+  background-color: #2F313660;
+  backdrop-filter: blur(10px);
+  position: absolute;
+  bottom: 3%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  & button {
+    & span{
+      vertical-align: middle;
+    }
+    margin:0 5px
+  }
+}
+.animation {
+  background-color: $Gray-95;
+  position: absolute;
+  z-index: 50;
+transition: 300ms;
+animation: fadetobg 2s linear 0.5s 1 normal forwards;
+  & .patterns {
+    height: 100vh;
+  }
+  & svg text {
+    visibility: hidden;
+    font-family: 'M PLUS 2';
+    stroke: #ffbb00;
+    font-size: 150px;
+    font-weight: 700;
+    stroke-width: 3;
+
+    animation: textAnimate 2s linear 0.5s 1 normal forwards;
+    -webkit-animation-delay: 1s; 
+     animation-delay: 1s;
+  }
+  
+}
+
+.notif {
+  background-color: $notif-color;
+  box-shadow: 0px 0px 20px 5px rgba(0, 0, 0, 0.6);
+  width: 400px;
+  position: absolute;
+  z-index: 5;
+  top: 20px;
+  right: 20px;
+  color: $Milkwhite;
+  display: none;
+
+  & .notif-icon {
+    flex: 15%;
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
+    background-color: darken($color: $notif-color, $amount: 10);
+  }
+
+  & .notif-content {
+    flex: 85%;
+    line-height: 1.5;
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+
+
+    // & .notif-desc span {
+    //   overflow: hidden;
+    //   text-overflow: ellipsis;
+    //   display: -webkit-box;
+    //   -webkit-line-clamp: 1;
+    //   /* number of lines to show */
+    //   line-clamp: 1;
+    //   -webkit-box-orient: vertical;
+    // }
+
+    & button {
+      position: absolute;
+      top: 10px;
+      right: 5px;
+      color: $Milkwhite;
+    }
+
+    &:hover {
+      background-color: darken($color: $notif-color, $amount: 5);
+    }
+  }
+}
+
+//ANIMATIONS
+@keyframes textAnimate {
+  0% {
+  visibility: visible;
+
+    stroke-dasharray: 0 50%;
+    stroke-dashoffset: 20%;
+    fill: #414141
+  }
+
+  100% {
+    stroke-dasharray: 50% 0;
+    stroke-dashoffstet: -20%;
+    fill: #ffbb00;
+  visibility: visible;
+
+  }
+
+}
+@keyframes fadetobg {
+  0% {
+    background-color: $Gray-95;
+  }
+  100% {
+    background-color: $Gray-30;
+  }
+}

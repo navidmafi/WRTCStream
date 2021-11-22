@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Broadcaster</title>
+    <link rel="stylesheet" href="styles/broadcaster.css">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=M+PLUS+2:wght@100;200;300;400;700&display=swap"
+        rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/navidmafi/mycsslib@1.1/lib.css" />
+
+</head>
+
+<body class="nospacing">
+    <div class="text-center">
+        <div class="hdrbar px-1r brad-10 py-05r">
+            <h1 class="tc-white nospacing">Joltogether Broadcaster<span class="fs-10r fw-400">® Dev v0.24</span> </h1>
+        </div>
+        <!--src="https://file-examples-com.github.io/uploads/2017/04/file_example_MP4_1280_10MG.mp4"-->
+        <video autoplay id='video'></video><br>
+        <div class="connection">
+            <div id="connectionloader" class="flex-both-center hidden">
+                <div class="loader"></div>
+                <h3 class="tc-white mx-1r">Connecting...</h3>
+            </div> <br>
+            <form class="streamoptions" action="#" onsubmit="return startBroadcast(this)">
+                <div class="wd-100pr">
+                    <span class="tc-white">Video Quality : </span>
+                    <select id="videoQuality" required>
+                        <option value="" selected disabled hidden>Select Video Quality</option>
+                        <option value="120">poo 120p</option>
+                        <option value="480">SD 480p</option>
+                        <option value="576">SD 576p</option>
+                        <option value="720">HD 720p</option>
+                        <option value="1080">FHD 1080p</option>
+                        <option class="tc-red bg-black" value="1440">QHD 1440p</option>
+                        <option class="tc-red bg-black" value="2160">UHD 2160p</option>
+                    </select>
+                </div> <br>
+                <div class="wd-100pr">
+                    <span class="tc-white">Framerate : </span>
+                    <select id="videoFPS" required>
+                        <option value="" selected disabled hidden>Select Framerate</option>
+                        <option value="5">Slideshow</option>
+                        <option value="20">20 FPS</option>
+                        <option value="30">30 FPS</option>
+                        <option value="40">40 FPS</option>
+                        <option value="50">50 FPS</option>
+                        <option class="tc-red bg-black" value="60">60 FPS</option>
+                        <option class="tc-red bg-black" value="80">80 FPS</option>
+                        <option class="tc-red bg-black" value="120">120 FPS</option>
+                    </select>
+                </div><br>
+                <input type="submit" id="start-stream"
+                class="btn-join trans-100 bg-white noborder brad-5 px-1r py-05r fs-11r fw-400" value="Start Broadcasting">
+                
+            </form>
+            
+            <button id="end-stream"
+                class="btn-join trans-100 bg-white noborder brad-5 px-1r py-05r fs-11r fw-400 hidden">Stop
+                Broadcasting</button>
+        </div>
+        <footer class="nospacing text-center wd-100pr py-05r">This is a development build.</footer>
+    
+    </div>
+
+
+    <script src='./scripts/broadcaster.js'></script>
+
+</body>
+
+</html>
