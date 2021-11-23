@@ -10,16 +10,17 @@ window.onload = () => {
 function startBroadcast(form){
     console.log(form.getElementsByTagName("select")[0].value);
     console.log(form.getElementsByTagName("select")[1].value);
+    console.log(form.getElementsByTagName("select")[2].value);
     startbtn.classList.add("hidden");
     connectionloader.classList.remove("hidden");
-    init(form.getElementsByTagName("select")[0].value,form.getElementsByTagName("select")[1].value);
+    init(form.getElementsByTagName("select")[0].value,form.getElementsByTagName("select")[1].value,form.getElementsByTagName("select")[2].value);
     return false;
 }
-async function init(videoHG,videoFPS) {
+async function init(videoHG,videoFPS,videoBitrate) {
     const stream = await navigator.mediaDevices.getDisplayMedia({
         "audio": true,
         "video": {
-            "frameRate": videoFPS,
+            frameRate: videoFPS,
             height: videoHG
         }
     });
@@ -35,7 +36,7 @@ function createPeer() {
     const peer = new RTCPeerConnection({
         iceServers: [
             {
-                urls: "stun:stun.easyvoip.com"
+                urls: "stun:stun.easyvoip.com:3478"
             }
         ]
     });

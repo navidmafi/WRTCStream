@@ -28,7 +28,7 @@ window.onload = () => {
     btn30fwd.onclick = () => {
         videoobj.currentTime += 30;
     }
-    rcnctbtn.onclick = init();
+    rcnctbtn.onclick = init;
     fullscreenbtn.onclick = () => {
         videoobj.requestFullscreen();
     }
@@ -56,7 +56,7 @@ function createPeer() {
     const peer = new RTCPeerConnection({
         iceServers: [
             {
-                urls: "stun:stun.easyvoip.com"
+                urls: "stun:stun.easyvoip.com:3478"
             }
         ]
     });
