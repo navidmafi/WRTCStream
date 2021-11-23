@@ -4,9 +4,9 @@ const bodyParser = require('body-parser');
 const webrtc = require("wrtc");
 
 //let audioBandwidth = 50;
-let videoBandwidth = 8000;
+//let videoBandwidth = 8000;
 let senderStream;
-
+let peerOptions;
 app.use(express.static('public'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -20,7 +20,7 @@ app.post("/consumer", async ({ body }, res) => {
             }
         ]
     });
-    const desc = new webrtc.RTCSessionDescription(setBandwidth(body.sdp));
+    const desc = new webrtc.RTCSessionDescription(setBandwidth(body.sdp,peerOptions.bitrate));
     await peer.setRemoteDescription(desc);
     senderStream.getTracks().forEach(track => peer.addTrack(track, senderStream));
     const answer = await peer.createAnswer();
@@ -43,14 +43,15 @@ app.post('/broadcast', async ({ body }, res) => {
         ]
     });
     peer.ontrack = (e) => handleTrackEvent(e, peer);
-    const desc = new webrtc.RTCSessionDescription(setBandwidth(body.sdp));
+    peerOptions = body.peerOptions;
+    const desc = new webrtc.RTCSessionDescription(setBandwidth(body.sdp,peerOptions.bitrate));
     await peer.setRemoteDescription(desc);
     const answer = await peer.createAnswer();
     await peer.setLocalDescription(answer);
     const payload = {
         sdp: peer.localDescription
     }
-    //console.log(body.sdp);
+    console.log(body);
 
     res.json(payload);
 });
@@ -58,9 +59,9 @@ app.post('/broadcast', async ({ body }, res) => {
 function handleTrackEvent(e, peer) {
     senderStream = e.streams[0];
 };
-function setBandwidth(sdp) {
+function setBandwidth(sdp,bandwidth) {
     //sdp.sdp = sdp.sdp.replace(/a=mid:audio\r\n/g, 'a=mid:audio\r\nb=AS:' + audioBandwidth + '\r\n');
-    sdp.sdp = sdp.sdp.replace(/a=mid:0\r\n/g, 'a=mid:0\r\nb=AS:' + videoBandwidth + '\r\n');
+    sdp.sdp = sdp.sdp.replace(/a=mid:0\r\n/g, 'a=mid:0\r\nb=AS:' + bandwidth + '\r\n');
     console.log(sdp.sdp);
     return sdp;
 }

@@ -79,6 +79,8 @@ async function handleNegotiationNeededEvent(peer) {
     };
 
     const { data } = await axios.post('/consumer', payload);
+    console.log("kobs");
+    console.log(data.sdp.sdp);
     const desc = new RTCSessionDescription(data.sdp);
     peer.setRemoteDescription(desc).catch(e => console.log(e));
 }

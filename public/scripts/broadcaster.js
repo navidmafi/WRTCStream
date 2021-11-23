@@ -13,26 +13,30 @@ function startBroadcast(form){
     console.log(form.getElementsByTagName("select")[2].value);
     startbtn.classList.add("hidden");
     connectionloader.classList.remove("hidden");
-    init(form.getElementsByTagName("select")[0].value,form.getElementsByTagName("select")[1].value,form.getElementsByTagName("select")[2].value);
+    init({
+        videoQuality : form.getElementsByTagName("select")[0].value,
+        videoFPS : form.getElementsByTagName("select")[1].value,
+        videoBitrate : form.getElementsByTagName("select")[2].value
+    },{});
     return false;
 }
-async function init(videoHG,videoFPS,videoBitrate) {
+async function init(videoOptions,audioOptions){
     const stream = await navigator.mediaDevices.getDisplayMedia({
         "audio": true,
         "video": {
-            frameRate: videoFPS,
-            height: videoHG
+            frameRate: videoOptions.videoFPS,
+            height: videoOptions.videoQuality
         }
     });
     document.getElementById("video").srcObject = stream;
     connectionloader.classList.add("hidden");
 
-    const peer = createPeer();
+    const peer = createPeer({ bitrate : videoOptions.videoBitrate});
     stream.getTracks().forEach(track => peer.addTrack(track, stream));
 }
 
 
-function createPeer() {
+function createPeer(peerOptions) {
     const peer = new RTCPeerConnection({
         iceServers: [
             {
@@ -40,14 +44,15 @@ function createPeer() {
             }
         ]
     });
-    peer.onnegotiationneeded = () => handleNegotiationNeededEvent(peer);
+    peer.onnegotiationneeded = () => handleNegotiationNeededEvent(peer,peerOptions);
     return peer;
 }
 
-async function handleNegotiationNeededEvent(peer) {
+async function handleNegotiationNeededEvent(peer,peerOptions) {
     const offer = await peer.createOffer();
     await peer.setLocalDescription(offer);
     const payload = {
+        peerOptions,
         sdp: peer.localDescription
     };
 
