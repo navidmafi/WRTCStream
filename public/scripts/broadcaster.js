@@ -16,7 +16,9 @@ function startBroadcast(form){
     init({
         token : form.getElementsByTagName("input")[0].value
     },{
-        audioOptions : {},
+        audioOptions : {
+            audioBitrate : form.getElementsByTagName("select")[3].value
+        },
         videoOptions : {
             videoQuality : form.getElementsByTagName("select")[0].value,
             videoFPS : form.getElementsByTagName("select")[1].value,
@@ -25,6 +27,7 @@ function startBroadcast(form){
     });
     return false;
 }
+
 async function init(clientOptions,mediaOptions){
     const stream = await navigator.mediaDevices.getDisplayMedia({
         "audio": true,
@@ -38,24 +41,38 @@ async function init(clientOptions,mediaOptions){
     connectionloader.classList.add("hidden");
 
     const peer = createPeer(clientOptions,mediaOptions);
-    stream.getTracks().forEach(track => peer.addTrack(track, stream));
+    // peer.addEventListener("icecandidateerror", (e) =>
+    // {
+    //     notifier.alert(e.errorCode + e.errorText + '<strong> Trying to reconnect</strong>',{labels : {alert : "ICE Failed"}});
+    //     console.log(e);
+    //     setTimeout(() =>{peer.restartIce()},10000)
+    // });
+    stream.getTracks().forEach(track => {
+        peer.addTrack(track, stream);
+        console.log(track);
+    });
+    console.log(peer);
 }
 
 
 function createPeer(clientOptions,mediaOptions) {
     const peer = new RTCPeerConnection({
         iceServers: [
-            {
-                urls: "stun:stun.easyvoip.com:3478"
-            }
+            {urls: "stun:stun1.l.google.com:19302"},
+            {urls: "stun:stun2.l.google.com:19302"},
+            {urls: "stun:stun3.l.google.com:19302"},
+            {urls: "stun:stun.nextcloud.com:443"}
+
         ]
     });
+
     peer.onnegotiationneeded = () => handleNegotiationNeededEvent(peer,clientOptions,mediaOptions);
     return peer;
 }
 
 async function handleNegotiationNeededEvent(peer,clientOptions,mediaOptions) {
     const offer = await peer.createOffer();
+    console.log(offer);
     await peer.setLocalDescription(offer);
     const payload = {
         clientOptions,

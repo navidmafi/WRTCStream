@@ -46,15 +46,17 @@ window.addEventListener("unhandledrejection", function(pre) {
 });
 async function init() {
     const peer = createPeer();
-    peer.addTransceiver("video", { direction: "recvonly" })
+    peer.addTransceiver("video", { direction: "recvonly" });
+    peer.addTransceiver("audio", { direction: "recvonly" });
 }
 
 function createPeer() {
     const peer = new RTCPeerConnection({
         iceServers: [
-            {
-                urls: "stun:stun.easyvoip.com:3478"
-            }
+            {urls: "stun:stun1.l.google.com:19302"},
+            {urls: "stun:stun2.l.google.com:19302"},
+            {urls: "stun:stun3.l.google.com:19302"},
+            {urls: "stun:stun.nextcloud.com:443"}
         ]
     });
     peer.ontrack = handleTrackEvent;
@@ -78,6 +80,7 @@ async function handleNegotiationNeededEvent(peer) {
     const { data } = await axios.post('/consumer', payload);
     console.log(data);
     if (data.isBroadcasting) {
+        console.log(data.sdp.sdp)
         const desc = new RTCSessionDescription(data.sdp);
         peer.setRemoteDescription(desc).catch(e => console.log(e));
     }
@@ -92,3 +95,4 @@ function handleTrackEvent(e) {
     videoobj.srcObject = e.streams[0];
 
 }
+
