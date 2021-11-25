@@ -1,6 +1,9 @@
 const startbtn = document.getElementById('start-stream');
 const endbtn = document.getElementById('end-stream');
 const connectionloader = document.getElementById('connectionloader');
+const notifier = new AWN({position:"top-right"});
+
+//const roomId =
 window.onload = () => {
     // startbtn.onclick = () => {
     //     init();
@@ -8,35 +11,38 @@ window.onload = () => {
    
 }
 function startBroadcast(form){
-    console.log(form.getElementsByTagName("select")[0].value);
-    console.log(form.getElementsByTagName("select")[1].value);
-    console.log(form.getElementsByTagName("select")[2].value);
+
     startbtn.classList.add("hidden");
     connectionloader.classList.remove("hidden");
     init({
-        videoQuality : form.getElementsByTagName("select")[0].value,
-        videoFPS : form.getElementsByTagName("select")[1].value,
-        videoBitrate : form.getElementsByTagName("select")[2].value
-    },{});
+        token : form.getElementsByTagName("input")[0].value
+    },{
+        audioOptions : {},
+        videoOptions : {
+            videoQuality : form.getElementsByTagName("select")[0].value,
+            videoFPS : form.getElementsByTagName("select")[1].value,
+            videoBitrate : form.getElementsByTagName("select")[2].value
+        }
+    });
     return false;
 }
-async function init(videoOptions,audioOptions){
+async function init(clientOptions,mediaOptions){
     const stream = await navigator.mediaDevices.getDisplayMedia({
         "audio": true,
         "video": {
-            frameRate: videoOptions.videoFPS,
-            height: videoOptions.videoQuality
+            frameRate: mediaOptions.videoOptions.videoFPS,
+            height: mediaOptions.videoOptions.videoQuality
         }
     });
     document.getElementById("video").srcObject = stream;
     connectionloader.classList.add("hidden");
 
-    const peer = createPeer({ bitrate : videoOptions.videoBitrate});
+    const peer = createPeer(clientOptions,mediaOptions);
     stream.getTracks().forEach(track => peer.addTrack(track, stream));
 }
 
 
-function createPeer(peerOptions) {
+function createPeer(clientOptions,mediaOptions) {
     const peer = new RTCPeerConnection({
         iceServers: [
             {
@@ -44,19 +50,28 @@ function createPeer(peerOptions) {
             }
         ]
     });
-    peer.onnegotiationneeded = () => handleNegotiationNeededEvent(peer,peerOptions);
+    peer.onnegotiationneeded = () => handleNegotiationNeededEvent(peer,clientOptions,mediaOptions);
     return peer;
 }
 
-async function handleNegotiationNeededEvent(peer,peerOptions) {
+async function handleNegotiationNeededEvent(peer,clientOptions,mediaOptions) {
     const offer = await peer.createOffer();
     await peer.setLocalDescription(offer);
     const payload = {
-        peerOptions,
+        clientOptions,
+        mediaOptions,
         sdp: peer.localDescription
     };
 
     const { data } = await axios.post('/broadcast', payload);
-    const desc = new RTCSessionDescription(data.sdp);
-    peer.setRemoteDescription(desc).catch(e => console.log(e));
+    if(data.authStatus == "failed") {
+        notifier.alert('Authorization failed, please provide valid connection token',{labels : {alert : "Cannot connect"}});
+    }
+    else {
+        const desc = new RTCSessionDescription(data.sdp);
+        peer.setRemoteDescription(desc).catch(e => notifier.alert(e ,{labels : {alert : "RTC Failed"}}));
+
+    }
+
+
 }

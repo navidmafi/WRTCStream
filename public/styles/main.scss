@@ -1,4 +1,5 @@
-@use "colors"as *;
+@use "globals" as *;
+@use "colors" as *;
 
 .connection {
   position: absolute;
@@ -7,7 +8,7 @@
 
   transform: translate(-50%, -50%);
 
-  & button:hover {
+  & input[type=submit]:hover {
     background-color: $Gray-70;
     color: $Milkwhite
   }
@@ -36,14 +37,101 @@ video {
 
 .hdrbar {
   background-color: #2F313660;
-  //backdrop-filter: blur(10px);
   position: absolute;
   top: 6%;
   left: 50%;
   transform: translate(-50%, -50%);
 }
+.streamoptions {
+  width: 300px;
+  background-color: rgba($Gray-10,0.7);
+  & .selector {
+    display: flex;
+    justify-content: space-between;
+  }
+  & select {
+    background-color: $Gray-70;
+    color : $Milkwhite;
+    border: 1px $Milkwhite solid;
+    border-radius: 3px;
+    font-family: 'M PLUS 2';
+    padding: 5px;
+  }
+  & option {
+
+    font-family: 'M PLUS 2';
+    background-color: $Gray-50;
+  }
+}
 
 @keyframes spin {
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
+}
+
+.toolsbtm {
+  background-color: #2F313660;
+  position: absolute;
+  bottom: 3%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  & button {
+    & span{
+      vertical-align: middle;
+    }
+    margin:0 5px
+  }
+}
+.animation {
+  background-color: $Gray-95;
+  position: absolute;
+  z-index: 50;
+  transition: 300ms;
+  animation: fadetobg 2s linear 0.5s 1 normal forwards;
+  & .patterns {
+    height: 100vh;
+  }
+  & svg text {
+    visibility: hidden;
+    font-family: 'M PLUS 2';
+    stroke: #ffffff;
+    font-size: 150px;
+    font-weight: 700;
+    stroke-width: 3;
+
+    animation: textAnimate 2s linear 0.5s 1 normal forwards;
+    -webkit-animation-delay: 1s;
+    animation-delay: 1s;
+  }
+
+}
+
+
+
+//ANIMATIONS
+@keyframes textAnimate {
+  0% {
+    visibility: visible;
+
+    stroke-dasharray: 0 50%;
+    stroke-dashoffset: 20%;
+    fill: #429EFF
+  }
+
+  100% {
+    stroke-dasharray: 50% 0;
+    stroke-dashoffstet: -20%;
+    fill: #429EFF;
+    visibility: visible;
+
+  }
+
+}
+@keyframes fadetobg {
+  0% {
+    background-color: $Gray-95;
+  }
+  100% {
+    background-color: $Gray-30;
+  }
 }

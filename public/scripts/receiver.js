@@ -1,36 +1,34 @@
+const mediacontrolButtons = {
+    play : document.getElementById('playbtn'),
+    pause : document.getElementById('pausebtn'),
+    fwd30 : document.getElementById('30fwd'),
+    bwd30 : document.getElementById('30bwd'),
+    reconnect : document.getElementById('reconnect'),
+    gofull : document.getElementById('fullscreenbtn')
+}
 const JoinBtn = document.getElementById('joinbutton');
-const errdesc = document.getElementById('errordesc');
-const notif = document.getElementById('notif');
 const intro = document.getElementById('intro');
-const notifignore = document.getElementById('notif-ignore');
-const playbtn = document.getElementById('playbtn');
-const pausebtn = document.getElementById('pausebtn');
-const btn30fwd = document.getElementById('30fwd');
-const btn30bwd = document.getElementById('30bwd');
-const rcnctbtn = document.getElementById('reconnect');
-const fullscreenbtn = document.getElementById('fullscreenbtn');
 const connectionloader = document.getElementById('connectionloader');
 const videoobj = document.getElementById("video");
-notifignore.onclick = () => {
-    notif.style.display="none";
-}
-
+const notifier = new AWN({position:"top-right"});
 window.onload = () => {
-    pausebtn.onclick = () => {
+    mediacontrolButtons.pause.onclick = () => {
         videoobj.pause(); 
     }
-    playbtn.onclick = () => {
+    mediacontrolButtons.play.onclick = () => {
         videoobj.play(); 
     }
-    btn30bwd.onclick = () => {
+    mediacontrolButtons.bwd30.onclick = () => {
         videoobj.currentTime -= 30;
     }
-    btn30fwd.onclick = () => {
+    mediacontrolButtons.fwd30.onclick = () => {
         videoobj.currentTime += 30;
     }
-    rcnctbtn.onclick = init;
-    fullscreenbtn.onclick = () => {
-        videoobj.requestFullscreen();
+    mediacontrolButtons.reconnect.onclick = init;
+    mediacontrolButtons.gofull.onclick = () => {
+        videoobj.requestFullscreen().then(r => {
+
+        });
     }
     JoinBtn.onclick = () => {
         JoinBtn.classList.add("hidden");
@@ -44,8 +42,10 @@ window.onload = () => {
 window.addEventListener("unhandledrejection", function(pre) { 
     console.log(pre);
     //errdesc.innerText=pre.reason;
-    errdesc.innerText=pre.reason;
-    notif.style.display="flex";
+    notifier.alert(pre.reason.toString(),{
+        labels : {alert : "unhandled rejection"},
+        durations : { alert : 60000 }
+    });
 });
 async function init() {
     const peer = createPeer();
@@ -79,10 +79,13 @@ async function handleNegotiationNeededEvent(peer) {
     };
 
     const { data } = await axios.post('/consumer', payload);
-    console.log("kobs");
-    console.log(data.sdp.sdp);
-    const desc = new RTCSessionDescription(data.sdp);
-    peer.setRemoteDescription(desc).catch(e => console.log(e));
+    if (data.isBroadcasting) {
+        const desc = new RTCSessionDescription(data.sdp);
+        peer.setRemoteDescription(desc).catch(e => console.log(e));
+    }
+    else {
+        notifier.alert('There is no broadcast running',{labels : {alert : "No Broadcast"}});
+    }
 }
 
 function handleTrackEvent(e) {

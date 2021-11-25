@@ -7,7 +7,10 @@ body {
 ::-webkit-media-controls {
     display:none !important;
   }
-button {
+input {
+  font-family: 'M PLUS 2';
+}
+button,input[type=submit] {
   font-family: 'M PLUS 2';
   cursor: pointer;
   &:disabled {
