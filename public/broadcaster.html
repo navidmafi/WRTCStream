@@ -26,7 +26,7 @@
             <h1 class="tc-white nospacing">Cloudconnect<span class="fs-10r fw-400">® Broadcaster v0.4 (Dev) </span> </h1>
         </div>
         <!--src="https://file-examples-com.github.io/uploads/2017/04/file_example_MP4_1280_10MG.mp4"-->
-        <video autoplay id='video'></video><br>
+        <video autoplay id='video' muted></video><br>
         <div class="connection">
 
             <form class="streamoptions px-2r py-2r brad-10" action="#" onsubmit="return startBroadcast(this)">
@@ -70,7 +70,7 @@
                         <option value="16000">16 Mbps</option>
                     </select>
                 </div>
-                <input type="password" id="token" class="my-1r fs-10r wd-80pr " placeholder="Enter client token" required>
+                <input type="text" id="token" class="my-1r fs-10r wd-80pr " placeholder="Enter client token" autocomplete="off" required>
                 <input type="submit" id="start-stream"
                 class="btn-join trans-100 bg-white noborder brad-5 px-1r py-05r fs-11r fw-400" value="Start Broadcasting">
                 <div id="connectionloader" class="flex-both-center hidden">

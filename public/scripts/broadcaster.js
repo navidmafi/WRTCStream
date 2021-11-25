@@ -1,19 +1,18 @@
+// © Copyright Navid Mafi Ranji 2021 . <navidmafi2006@gmail.com> ALL RIGHT RESERVED
+
+
 const startbtn = document.getElementById('start-stream');
 const endbtn = document.getElementById('end-stream');
 const connectionloader = document.getElementById('connectionloader');
 const notifier = new AWN({position:"top-right"});
 
-//const roomId =
-window.onload = () => {
-    // startbtn.onclick = () => {
-    //     init();
-    // }
-   
-}
+//TODO ROOM ID ON WINDOW.ONLOAD
+
 function startBroadcast(form){
 
     startbtn.classList.add("hidden");
     connectionloader.classList.remove("hidden");
+    form.getElementsByTagName("input")[0].style.filter = "blur(5px)"
     init({
         token : form.getElementsByTagName("input")[0].value
     },{
@@ -34,6 +33,7 @@ async function init(clientOptions,mediaOptions){
             height: mediaOptions.videoOptions.videoQuality
         }
     });
+    console.log(stream);
     document.getElementById("video").srcObject = stream;
     connectionloader.classList.add("hidden");
 
@@ -63,15 +63,18 @@ async function handleNegotiationNeededEvent(peer,clientOptions,mediaOptions) {
         sdp: peer.localDescription
     };
 
-    const { data } = await axios.post('/broadcast', payload);
-    if(data.authStatus == "failed") {
-        notifier.alert('Authorization failed, please provide valid connection token',{labels : {alert : "Cannot connect"}});
-    }
-    else {
+    const { data } = await axios.post('/broadcast', payload , {timeout : 3000});
+    if (data.authStatus) {
         const desc = new RTCSessionDescription(data.sdp);
         peer.setRemoteDescription(desc).catch(e => notifier.alert(e ,{labels : {alert : "RTC Failed"}}));
+    }
+    else if (data.authStatus == false) {
+        notifier.alert('Authorization failed, please provide valid connection token',{labels : {alert : "Cannot Authorize"}});
+        startbtn.classList.remove("hidden");
+        document.getElementsByTagName("input")[0].style.filter = ""
 
     }
+
 
 
 }

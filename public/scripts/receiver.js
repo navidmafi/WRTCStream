@@ -1,3 +1,5 @@
+// © Copyright Navid Mafi Ranji 2021 . <navidmafi2006@gmail.com> ALL RIGHT RESERVED
+
 const mediacontrolButtons = {
     play : document.getElementById('playbtn'),
     pause : document.getElementById('pausebtn'),
@@ -26,9 +28,7 @@ window.onload = () => {
     }
     mediacontrolButtons.reconnect.onclick = init;
     mediacontrolButtons.gofull.onclick = () => {
-        videoobj.requestFullscreen().then(r => {
-
-        });
+        videoobj.requestFullscreen();
     }
     JoinBtn.onclick = () => {
         JoinBtn.classList.add("hidden");
@@ -36,15 +36,12 @@ window.onload = () => {
         init();
     }
     setTimeout(() => {
-        intro.classList.add("hidden");
-    }, 5000);
+        intro.remove();
+    }, 4000);
 }
-window.addEventListener("unhandledrejection", function(pre) { 
-    console.log(pre);
-    //errdesc.innerText=pre.reason;
+window.addEventListener("unhandledrejection", function(pre) {
     notifier.alert(pre.reason.toString(),{
-        labels : {alert : "unhandled rejection"},
-        durations : { alert : 60000 }
+        labels : {alert : "unhandled rejection"}
     });
 });
 async function init() {
@@ -79,15 +76,19 @@ async function handleNegotiationNeededEvent(peer) {
     };
 
     const { data } = await axios.post('/consumer', payload);
+    console.log(data);
     if (data.isBroadcasting) {
         const desc = new RTCSessionDescription(data.sdp);
         peer.setRemoteDescription(desc).catch(e => console.log(e));
     }
     else {
-        notifier.alert('There is no broadcast running',{labels : {alert : "No Broadcast"}});
+        notifier.warning('There is no broadcast running',{labels : {alert : "No Broadcast"}});
+        JoinBtn.classList.remove("hidden");
+        connectionloader.classList.add("hidden");
     }
 }
 
 function handleTrackEvent(e) {
     videoobj.srcObject = e.streams[0];
-};
+
+}

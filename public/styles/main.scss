@@ -87,7 +87,7 @@ video {
   position: absolute;
   z-index: 50;
   transition: 300ms;
-  animation: fadetobg 2s linear 0.5s 1 normal forwards;
+  animation: fadetobg 3s linear 0.5s 1 normal forwards;
   & .patterns {
     height: 100vh;
   }
@@ -99,9 +99,9 @@ video {
     font-weight: 700;
     stroke-width: 3;
 
-    animation: textAnimate 2s linear 0.5s 1 normal forwards;
-    -webkit-animation-delay: 1s;
-    animation-delay: 1s;
+    animation: textAnimate 3s running 0.5s 1 normal forwards;
+    -webkit-animation-delay: 0.5s;
+    animation-delay: 0.5s;
   }
 
 }

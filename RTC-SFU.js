@@ -12,6 +12,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 app.post("/consumer", async ({ body }, res) => {
+    outputLog('debug',"isBroadcasting : " + isBroadcasting)
     if (isBroadcasting) {
         const peer = new webrtc.RTCPeerConnection({
             iceServers: [
@@ -26,6 +27,7 @@ app.post("/consumer", async ({ body }, res) => {
         const answer = await peer.createAnswer();
         await peer.setLocalDescription(answer);
         const payload = {
+            isBroadcasting,
             sdp: peer.localDescription
         }
         //console.log(body.sdp);
@@ -36,8 +38,6 @@ app.post("/consumer", async ({ body }, res) => {
         const payload = {
             isBroadcasting,
         }
-        //console.log(body.sdp);
-
         res.json(payload);
     }
 
@@ -63,7 +63,7 @@ app.post('/broadcast', async ({ body }, res) => {
        const answer = await peer.createAnswer();
        await peer.setLocalDescription(answer);
        const payload = {
-           authStatus : "success",
+           authStatus : true,
            sdp: peer.localDescription
        }
 
@@ -72,7 +72,7 @@ app.post('/broadcast', async ({ body }, res) => {
    else {
        outputLog('AUTH','Auth failed with token : ' + clientOptions.token)
        const payload = {
-           authStatus : "failed"
+           authStatus : false
        }
 
        res.json(payload);
