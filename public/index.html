@@ -13,20 +13,41 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/navidmafi/mycsslib@1.1/lib.css" />
   
 </head>
-<body>
-    <h1 class="tc-white">JolTogether Server v0.1</h1>
-    <p class="tc-white">WSS : <span class="tc-lime">OK</span></p>
-    <p class="tc-white">SFU : <span class="tc-lime">OK</span></p>
-    <p class="tc-white">ICE : <span class="tc-lime">OK</span></p>
-    <p class="tc-white">STUN : <span class="tc-lime">OK</span></p>
-    <p class="tc-white">Firewall : <span class="tc-lime">Allowed</span></p>
-    <p class="tc-white">NAT : <span class="tc-lime">OK</span></p>
-    <p class="tc-white">TURN : <span class="tc-red">FAIL</span></p>
+<body class="nospacing">
+    <h1 class="tc-white">Cloudconnect Server v0.3</h1>
+    <table class="wd-80pr mx-auto">
+        <tr>
+            <td>WSS</td>
+            <td>SFU</td>
+            <td>RTC Cap</td>
+            <td>ICE</td>
+            <td>NGINX</td>
+            <td>STUNs</td>
+            <td>TURNs</td>
+        </tr>
+
+        <tr>
+            <td class="tc-lime">OK</td>
+            <td class="tc-lime">OK</td>
+            <td class="tc-lime">OK</td>
+            <td class="tc-lime">OK</td>
+            <td class="tc-lime">OK</td>
+            <td class="tc-lime">OK</td>
+            <td class="tc-red">Standby</td>
+
+        </tr>
+    </table>
    
-    <a href="broadcaster.html">
-        <button class="bg-white tc-black noborder px-1r py-05r brad-5">Broadcaster</button>
-    </a> <br> <br>
-    <a href="receiver.html"> <button class="bg-white tc-black noborder px-1r py-05r brad-5">Receiver Client</button></a>
+    <div class="mx-auto text-center py-2r">
+        <a href="broadcaster.html" class="mx-2r">
+            <button class="bg-white tc-black noborder px-1r py-05r brad-5 wd-10pr">Broadcaster</button>
+        </a>
+        <a href="receiver.html" class="mx-2r">
+            <button class="bg-white tc-black noborder px-1r py-05r brad-5 wd-10pr">Receiver Client</button>
+        </a>
+
+    </div>
+    <footer class="nospacing text-center wd-100pr py-05r">This is a developer preview.</footer>
 
 </body>
 </html>

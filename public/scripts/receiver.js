@@ -1,5 +1,6 @@
 // © Copyright Navid Mafi Ranji 2021 . <navidmafi2006@gmail.com> ALL RIGHT RESERVED
 
+//TODO REMOVE CONTROLS FROM VIDEO
 const mediacontrolButtons = {
     play : document.getElementById('playbtn'),
     pause : document.getElementById('pausebtn'),

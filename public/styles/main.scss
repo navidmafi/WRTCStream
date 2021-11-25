@@ -34,7 +34,12 @@ footer {
 video {
   height: 95vh;
 }
-
+table, th, td {
+  border: 3px double white;
+  border-collapse: collapse;
+  color: white;
+  padding: 10px;
+}
 .hdrbar {
   background-color: #2F313660;
   position: absolute;
