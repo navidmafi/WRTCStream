@@ -43,7 +43,7 @@
 
 <body class="nospacing">
 
-  <div id="intro" class="animation flex-both-center wd-100pr">
+  <div id="intro" class="animation flex-both-center wd-100pr hidden">
     <div class="patterns">
       <svg width="100vw" height="95%">
 
@@ -55,11 +55,11 @@
   </div>
 
   <div class="text-center">
-    <div class="hdrbar px-1r brad-10 py-05r">
-      <h1 class="tc-white nospacing">Cloudconnect<span class="fs-10r fw-400">® Receiver v0.4 (Dev) </span> </h1>
+    <div class="hdrbar px-1r brad-10 py-05r trans-200" id="headerbar">
+      <h1 class="tc-white nospacing">Cloudconnect<span class="fs-10r fw-400">® v0.6 (Dev) </span> </h1>
     </div>
     <!--src="https://file-examples-com.github.io/uploads/2017/04/file_example_MP4_1280_10MG.mp4"-->
-    <video autoplay id='video' controls></video><br>
+    <video autoplay id='video'></video><br>
     <div class="connection">
       <div id="connectionloader" class="flex-both-center hidden">
         <div class="loader"></div> 
@@ -70,11 +70,20 @@
     </div>
 
   </div>
-  <div class="toolsbtm px-1r brad-10 py-05r">
+  <div class="mediaProps flex-horizontal px-05r py-05r text-center fs-08r brad-5">
+    <span class="material-icons md-24 tc-red my-auto">monitor</span>
+    <span class="flex-both-center fw-700 text-left">
+      <div class="flex-vertical">
+        <span id="videoqualityPlaceholder">MediaInfo</span>
+      <span id="videobitratePlaceholder">Unknown</span>
+      <span id="audiobitratePlaceholder">Unknown</span>
+      </div>
+    </span>
+  </div>
+  <div class="toolsbtm px-1r brad-10 py-05r trans-200" id="btmbar">
     <button id="reconnect" class="noborder bg-none tc-white nospacing"><span class="material-icons md-36">sync_problem</span></button>
     <button id="30bwd" class="noborder bg-none tc-white nospacing"><span class="material-icons md-36">replay_30</span></button>
-    <button id="playbtn" class="noborder bg-none tc-white nospacing"><span class="material-icons md-36">play_arrow</span></button>
-    <button id="pausebtn" class="noborder bg-none tc-white nospacing"><span class="material-icons md-36">pause</span></button>
+    <button id="pausebtn" class="noborder bg-none tc-white nospacing"><span class="material-icons md-36">play_arrow</span></button>
     <button id="30fwd" class="noborder bg-none tc-white nospacing" disabled><span class="material-icons md-36">forward_30</span></button>
     <button id="fullscreenbtn" class="noborder bg-none tc-white nospacing"><span class="material-icons md-36">aspect_ratio</span></button>
   </div>

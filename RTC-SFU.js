@@ -27,6 +27,7 @@ app.post("/consumer", async ({ body }, res) => {
         const answer = await peer.createAnswer();
         await peer.setLocalDescription(answer);
         const payload = {
+            mediaOptions,
             isBroadcasting,
             sdp: peer.localDescription
         }
@@ -56,7 +57,16 @@ app.post('/broadcast', async ({ body }, res) => {
            ]
        });
        peer.ontrack = (e) => handleTrackEvent(e, peer);
-
+       peer.ondatachannel = function(event) {
+           var channel = event.channel;
+           channel.onopen = function(event) {
+               channel.send('Hi back!');
+               console.log('Hied back')
+           }
+           channel.onmessage = function(event) {
+               console.log(event.data);
+           }
+       }
        const desc = new webrtc.RTCSessionDescription(setBandwidth(body.sdp,mediaOptions));
        await peer.setRemoteDescription(desc);
        const answer = await peer.createAnswer();
@@ -80,15 +90,18 @@ app.post('/broadcast', async ({ body }, res) => {
 
 function handleTrackEvent(e, peer) {
     senderStream = e.streams[0];
-    outputLog('status', 'Set senderStream for OK')
+    outputLog('status', 'Set senderStream OK')
     isBroadcasting = true;
 };
+
+
+
+
+
 function setBandwidth(sdp,mediaOptions) {
-    //sdp.sdp = sdp.sdp.replace(/a=mid:audio\r\n/g, 'a=mid:audio\r\nb=AS:' + audioBandwidth + '\r\n');
     outputLog('debug','audioBitrate : ' + mediaOptions.audioOptions.audioBitrate)
     sdp.sdp = sdp.sdp.replace(/a=mid:0\r\n/g, 'a=mid:0\r\nb=AS:' + mediaOptions.videoOptions.videoBitrate + '\r\n');
     sdp.sdp = sdp.sdp.replace(/a=mid:1\r\n/g, 'a=mid:1\r\nb=AS:' + mediaOptions.audioOptions.audioBitrate + '\r\n');
-    //TODO AUDIO BITRATE
     return sdp;
 }
 function outputLog(type,text) {
@@ -96,7 +109,7 @@ function outputLog(type,text) {
     let ftext = time.toLocaleTimeString() + ' ['+ type.toUpperCase() + '] : '+text;
     console.log(ftext);
 }
-function handleDisconnection () {
+function handleDisconnection() {
     isBroadcasting = false;
 }
 app.listen(5000, () => outputLog('status','Server Startup'));

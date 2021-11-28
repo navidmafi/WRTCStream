@@ -7,12 +7,14 @@ const connectionloader = document.getElementById('connectionloader');
 const notifier = new AWN({position:"top-right"});
 
 //TODO ROOM ID ON WINDOW.ONLOAD
-
+document.addEventListener('visibilitychange', function(ev) {
+    console.log(`Tab state : ${document.visibilityState}`);
+});
 function startBroadcast(form){
 
-    startbtn.classList.add("hidden");
+    startbtn.disabled = true;
     connectionloader.classList.remove("hidden");
-    form.getElementsByTagName("input")[0].style.filter = "blur(5px)"
+    form.getElementsByTagName("input")[0].style.display = "none";
     init({
         token : form.getElementsByTagName("input")[0].value
     },{
@@ -27,7 +29,6 @@ function startBroadcast(form){
     });
     return false;
 }
-
 async function init(clientOptions,mediaOptions){
     const stream = await navigator.mediaDevices.getDisplayMedia({
         "audio": true,
@@ -36,18 +37,13 @@ async function init(clientOptions,mediaOptions){
             height: mediaOptions.videoOptions.videoQuality
         }
     });
-    console.log(stream);
     document.getElementById("video").srcObject = stream;
     connectionloader.classList.add("hidden");
-
     const peer = createPeer(clientOptions,mediaOptions);
-    // peer.addEventListener("icecandidateerror", (e) =>
-    // {
-    //     notifier.alert(e.errorCode + e.errorText + '<strong> Trying to reconnect</strong>',{labels : {alert : "ICE Failed"}});
-    //     console.log(e);
-    //     setTimeout(() =>{peer.restartIce()},10000)
-    // });
     stream.getTracks().forEach(track => {
+        track.onended = (track) => {
+
+        }
         peer.addTrack(track, stream);
         console.log(track);
     });
@@ -65,7 +61,14 @@ function createPeer(clientOptions,mediaOptions) {
 
         ]
     });
-
+    const eventsChannel = peer.createDataChannel("RTCEvents");
+    eventsChannel.onopen = event => {
+        eventsChannel.send('Hi you!');
+        console.log('sent' ,event);
+    };
+    eventsChannel.onmessage = event => {
+        console.log(event.data);
+    }
     peer.onnegotiationneeded = () => handleNegotiationNeededEvent(peer,clientOptions,mediaOptions);
     return peer;
 }
@@ -88,7 +91,7 @@ async function handleNegotiationNeededEvent(peer,clientOptions,mediaOptions) {
     else if (data.authStatus == false) {
         notifier.alert('Authorization failed, please provide valid connection token',{labels : {alert : "Cannot Authorize"}});
         startbtn.classList.remove("hidden");
-        document.getElementsByTagName("input")[0].style.filter = ""
+        document.getElementsByTagName("input")[0].style.display = "";
 
     }
 

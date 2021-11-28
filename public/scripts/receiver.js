@@ -2,8 +2,7 @@
 
 //TODO REMOVE CONTROLS FROM VIDEO
 const mediacontrolButtons = {
-    play : document.getElementById('playbtn'),
-    pause : document.getElementById('pausebtn'),
+    playpause : document.getElementById('pausebtn'),
     fwd30 : document.getElementById('30fwd'),
     bwd30 : document.getElementById('30bwd'),
     reconnect : document.getElementById('reconnect'),
@@ -13,13 +12,28 @@ const JoinBtn = document.getElementById('joinbutton');
 const intro = document.getElementById('intro');
 const connectionloader = document.getElementById('connectionloader');
 const videoobj = document.getElementById("video");
+const headerbar = document.getElementById('headerbar');
+const btmbar = document.getElementById("btmbar");
+const mediaInfo = {
+    videoQuality: document.querySelector('#videoqualityPlaceholder'),
+    videoBR: document.querySelector('#videobitratePlaceholder'),
+    audioBR: document.querySelector('#audiobitratePlaceholder')
+}
 const notifier = new AWN({position:"top-right"});
+let streamPlaybackState = false;
 window.onload = () => {
-    mediacontrolButtons.pause.onclick = () => {
-        videoobj.pause(); 
-    }
-    mediacontrolButtons.play.onclick = () => {
-        videoobj.play(); 
+    mediacontrolButtons.playpause.onclick = () => {
+        if (streamPlaybackState) {
+            videoobj.pause();
+            mediacontrolButtons.playpause.children[0].innerText="play_arrow";
+            streamPlaybackState = false;
+        }
+        else {
+                videoobj.play();
+                mediacontrolButtons.playpause.children[0].innerText="pause";
+                streamPlaybackState = true;
+        }
+
     }
     mediacontrolButtons.bwd30.onclick = () => {
         videoobj.currentTime -= 30;
@@ -39,6 +53,8 @@ window.onload = () => {
     setTimeout(() => {
         intro.remove();
     }, 4000);
+
+
 }
 window.addEventListener("unhandledrejection", function(pre) {
     notifier.alert(pre.reason.toString(),{
@@ -79,11 +95,16 @@ async function handleNegotiationNeededEvent(peer) {
     };
 
     const { data } = await axios.post('/consumer', payload);
+
     console.log(data);
     if (data.isBroadcasting) {
         console.log(data.sdp.sdp)
+        mediaInfo.videoQuality.innerText= data.mediaOptions.videoOptions.videoQuality + 'p ' +  data.mediaOptions.videoOptions.videoFPS + 'FPS';
+        mediaInfo.videoBR.innerText= 'V: ' + data.mediaOptions.videoOptions.videoBitrate + 'Kbps';
+        mediaInfo.audioBR.innerText= 'A: ' + data.mediaOptions.audioOptions.audioBitrate + 'Kbps';
         const desc = new RTCSessionDescription(data.sdp);
         peer.setRemoteDescription(desc).catch(e => console.log(e));
+        peer.ondatachannel = (e) => { console.log(e) };
     }
     else {
         notifier.warning('There is no broadcast running',{labels : {alert : "No Broadcast"}});
@@ -94,6 +115,21 @@ async function handleNegotiationNeededEvent(peer) {
 
 function handleTrackEvent(e) {
     videoobj.srcObject = e.streams[0];
-
+    setTimeout(function() {
+        btmbar.style.opacity = "0";
+        headerbar.style.opacity = "0";
+    },2000);
+    btmbar.addEventListener('mouseleave',function() {
+        setTimeout(function() {
+            btmbar.style.opacity = "0";
+            headerbar.style.opacity = "0";
+        },2000)
+    });
+    btmbar.addEventListener('mouseenter',function() {
+        btmbar.style.opacity = "1";
+        headerbar.style.opacity = "1";
+    });
+    mediacontrolButtons.playpause.children[0].innerText="pause";
+    streamPlaybackState = true;
 }
 
