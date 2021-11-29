@@ -36,9 +36,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Viewer</title>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js"></script>
-  <link rel="stylesheet" href="styles/main.css">
-  <link rel="stylesheet" href="styles/notif.css" />
-  <script src="scripts/notif.js"></script>
+  <link rel="stylesheet" href="/assets/styles/main.css">
+  <link rel="stylesheet" href="/assets/styles/notif.css" />
+  <script src="/assets/scripts/notif.js"></script>
 </head>
 
 <body class="nospacing">
@@ -56,7 +56,7 @@
 
   <div class="text-center">
     <div class="hdrbar px-1r brad-10 py-05r trans-200" id="headerbar">
-      <h1 class="tc-white nospacing">Cloudconnect<span class="fs-10r fw-400">® v0.6 (Dev) </span> </h1>
+      <h1 class="tc-white nospacing fw-400">Joltogether<span class="fs-10r fw-400">® v0.63 (Dev) </span> </h1>
     </div>
     <!--src="https://file-examples-com.github.io/uploads/2017/04/file_example_MP4_1280_10MG.mp4"-->
     <video autoplay id='video'></video><br>
@@ -87,8 +87,22 @@
     <button id="30fwd" class="noborder bg-none tc-white nospacing" disabled><span class="material-icons md-36">forward_30</span></button>
     <button id="fullscreenbtn" class="noborder bg-none tc-white nospacing"><span class="material-icons md-36">aspect_ratio</span></button>
   </div>
-  <footer class="nospacing text-center wd-100pr py-05r">This is a developer preview.</footer>
-  <script src='./scripts/receiver.js'></script>
+  <footer class="nospacing text-center wd-100pr py-05r">
+    <div class="text-left">
+      <span class="mx-05r">Not connected</span>
+      <span class="mx-05r">Down : 0KB/s</span>
+      <span class="mx-05r">Up : 0KB/s</span>
+      <span class="mx-05r">Usage : 0KB</span>
+
+    </div>
+    <div>
+      <span>This is a developer preview.</span>
+    </div><div>
+    <span>This is a developer preview.</span>
+  </div>
+
+  </footer>
+  <script src='/assets/scripts/receiver.js'></script>
 
 </body>
 

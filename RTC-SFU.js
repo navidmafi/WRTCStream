@@ -1,4 +1,5 @@
 const express = require('express');
+const path = require('path');
 const app = express();
 const bodyParser = require('body-parser');
 const webrtc = require("wrtc");
@@ -8,11 +9,24 @@ let senderStream;
 let mediaOptions;
 let clientOptions;
 let isBroadcasting = false;
-app.use(express.static('public'));
+app.use('/assets', express.static('assets'))
+app.get('/', function(req, res) {
+    res.sendFile(path.join(__dirname, '/views/index.html'));
+});
+
+app.get('/rcvr', function(req, res) {
+    res.sendFile(path.join(__dirname, '/views/receiver.html'));
+});
+app.get('/vbrod', function(req, res) {
+    res.sendFile(path.join(__dirname, '/views/videobroadcaster.html'));
+});
+app.get('/fbrod', function(req, res) {
+    res.sendFile(path.join(__dirname, '/views/filebroadcaster.html'));
+});
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 
-app.post("/consumer", async ({body}, res) => {
+app.post("/api/consumer", async ({body}, res) => {
     outputLog('debug', "requested broadcast. isBroadcasting : " + isBroadcasting)
     if (isBroadcasting) {
         const peer = new webrtc.RTCPeerConnection({
@@ -43,7 +57,7 @@ app.post("/consumer", async ({body}, res) => {
 
 });
 
-app.post('/broadcast', async ({body}, res) => {
+app.post('/api/broadcast', async ({body}, res) => {
     mediaOptions = body.mediaOptions;
     clientOptions = body.clientOptions;
     if (allowedClients.includes(clientOptions.token)) {

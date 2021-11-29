@@ -59,6 +59,7 @@ window.addEventListener("unhandledrejection", function (pre) {
     notifier.alert(pre.reason.toString(), {
         labels: {alert: "unhandled rejection"}
     });
+    JoinBtn.classList.remove("hidden");
 });
 
 async function init() {
@@ -100,7 +101,7 @@ async function handleNegotiationNeededEvent(peer) {
         sdp: peer.localDescription
     };
 
-    const {data} = await axios.post('/consumer', payload);
+    const {data} = await axios.post('/api/consumer', payload);
 
     console.log(data);
     if (data.isBroadcasting) {

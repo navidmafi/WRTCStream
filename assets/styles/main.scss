@@ -30,6 +30,10 @@ footer {
   bottom: 0;
   font-size: 12px;
   line-height: 1;
+  display: flex;
+  & div {
+    width: 33%;
+  }
 }
 
 video {

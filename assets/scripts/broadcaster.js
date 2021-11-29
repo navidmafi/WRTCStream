@@ -108,7 +108,7 @@ async function handleNegotiationNeededEvent(peer, clientOptions, mediaOptions) {
         sdp: peer.localDescription
     };
 
-    const {data} = await axios.post('/broadcast', payload, {timeout: 3000});
+    const {data} = await axios.post('/api/broadcast', payload, {timeout: 3000});
     if (data.authStatus) {
         const desc = new RTCSessionDescription(data.sdp);
         peer.setRemoteDescription(desc).catch(e => notifier.alert(e, {labels: {alert: "RTC Failed"}}));
