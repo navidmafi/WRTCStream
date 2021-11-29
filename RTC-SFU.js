@@ -112,6 +112,16 @@ function handleTrackEvent(e, peer) {
 
 
 function setBandwidth(sdp, mediaOptions) {
+    // console.log(sdp);
+    // let bandwidth = mediaOptions.videoOptions.videoBitrate;
+    // let modifier = 'AS';
+    // if (sdp.sdp.indexOf('b=' + modifier + ':') === -1) {
+    //     // insert b= after c= line.
+    //     sdp.sdp = sdp.sdp.replace(/c=IN (.*)\r\n/, 'c=IN $1\r\nb=' + modifier + ':' + bandwidth + '\r\n');
+    // } else {
+    //     sdp.sdp = sdp.sdp.replace(new RegExp('b=' + modifier + ':.*\r\n'), 'b=' + modifier + ':' + bandwidth + '\r\n');
+    // }
+    // return sdp;
     outputLog('debug', 'audioBitrate : ' + mediaOptions.audioOptions.audioBitrate)
     sdp.sdp = sdp.sdp.replace(/a=mid:0\r\n/g, 'a=mid:0\r\nb=AS:' + mediaOptions.videoOptions.videoBitrate + '\r\n');
     sdp.sdp = sdp.sdp.replace(/a=mid:1\r\n/g, 'a=mid:1\r\nb=AS:' + mediaOptions.audioOptions.audioBitrate + '\r\n');

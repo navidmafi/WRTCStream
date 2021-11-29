@@ -1,25 +1,26 @@
 // © Copyright Navid Mafi Ranji 2021 . <navidmafi2006@gmail.com> ALL RIGHT RESERVED
 
 
+
 const startbtn = document.getElementById('start-stream');
-const endbtn = document.getElementById('end-stream');
 const connectionloader = document.getElementById('connectionloader');
 const notifier = new AWN({position: "top-right"});
+const tokenInput = document.getElementById('token');
+let lastResult;
 const clientStatus = {
-    connected : false
+    connected : false ,
+    bitrateNow : 0,
+    usageEst : 0
 }
+const footerStats = document.getElementById('footerstat');
 //TODO ROOM ID ON WINDOW.ONLOAD
-document.addEventListener('visibilitychange', function (ev) {
-    console.log(`Tab state : ${document.visibilityState}`);
-});
 
 function startBroadcast(form) {
-
     startbtn.disabled = true;
     connectionloader.classList.remove("hidden");
-    form.getElementsByTagName("input")[0].style.display = "none";
+    tokenInput.classList.add('hidden');
     init({
-        token: form.getElementsByTagName("input")[0].value
+        token: tokenInput.value
     }, {
         audioOptions: {
             audioBuffer : 2,
@@ -71,22 +72,49 @@ function createPeer(clientOptions, mediaOptions) {
         ]
     });
 
+    // Network Monitor
+    window.setInterval(() => {
+        //TODO add audio est too
+        const sender = peer.getSenders()[0];
+        sender.getStats().then(res => {
+            res.forEach(report => {
+                let bytes;
+                //let packets;
+                if (report.type === 'outbound-rtp') {
+                    if (report.isRemote) {
+                        return;
+                    }
+                    const now = report.timestamp;
+                    bytes = report.bytesSent;
+                    // packets = report.packetsSent;
+                    if (lastResult && lastResult.has(report.id)) {
+                        // calculate bitrate
+                        const bitrate = 8 * (bytes - lastResult.get(report.id).bytesSent) /
+                            (now - lastResult.get(report.id).timestamp);
 
+                        // console.log(bitrate,now,now, packets - lastResult.get(report.id).packetsSent);
+                        footerStats.children[1].innerText='Current Bitrate : ' + Math.round(bitrate) + 'KB/s';
+                        clientStatus.usageEst += Math.round(bitrate * 2);
+                        footerStats.children[2].innerText='Usage Est. : ' + Math.round(8*bytes/1000) + 'KB';
+                    }
+                }
+            });
+            lastResult = res;
+        });
+    }, 2000);
 
     const eventsChannel = peer.createDataChannel("RTCEvents");
-
     eventsChannel.onopen = event => {
         eventsChannel.send('Hi you!');
         console.log('sent', event);
     };
     eventsChannel.onmessage = event => {
-
+        console.log(event.data);
         if (event.data == 'established'){
             clientStatus.connected = true;
-            notifier.info('RTC Connection established', {labels: {alert: "RTC Connected"}});
+            notifier.success('RTC connection established', {labels: {success: "RTC Connected"}});
+            footerStats.children[0].innerText="RTC Connected";
         }
-
-        console.log(event.data);
     }
     setTimeout( function() {
         if (clientStatus.connected == false) {
@@ -98,8 +126,6 @@ function createPeer(clientOptions, mediaOptions) {
 }
 
 async function handleNegotiationNeededEvent(peer, clientOptions, mediaOptions) {
-    console.log(peer.getReceivers()[0]);
-    console.log('done');
     const offer = await peer.createOffer();
     await peer.setLocalDescription(offer);
     const payload = {
@@ -115,14 +141,14 @@ async function handleNegotiationNeededEvent(peer, clientOptions, mediaOptions) {
     } else if (data.authStatus == false) {
         notifier.alert('Authorization failed, please provide valid connection token', {labels: {alert: "Cannot Authorize"}});
         startbtn.classList.remove("hidden");
-        document.getElementsByTagName("input")[0].style.display = "";
+        tokenInput.classList.remove('hidden');
 
     }
 }
 
 function loaddefaultsettings() {
     let elements = document.getElementsByTagName("select");
-    document.getElementsByTagName('input')[0].value = 'kobs';
+    tokenInput.value = 'kobs';
 
     for (let element of elements) {
        element.children[2].selected= true;
