@@ -28,7 +28,8 @@ footer {
   color: $Milkwhite;
   position: absolute;
   bottom: 0;
-  font-size: 15px;
+  font-size: 12px;
+  line-height: 1;
 }
 
 video {
@@ -51,7 +52,7 @@ table, th, td {
 .toolsbtm {
   background-color: #00000095;
   position: absolute;
-  bottom: 3%;
+  bottom: 5px;
   left: 50%;
   transform: translate(-50%, -50%);
   & button {

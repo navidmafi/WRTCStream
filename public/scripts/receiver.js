@@ -2,11 +2,11 @@
 
 //TODO REMOVE CONTROLS FROM VIDEO
 const mediacontrolButtons = {
-    playpause : document.getElementById('pausebtn'),
-    fwd30 : document.getElementById('30fwd'),
-    bwd30 : document.getElementById('30bwd'),
-    reconnect : document.getElementById('reconnect'),
-    gofull : document.getElementById('fullscreenbtn')
+    playpause: document.getElementById('pausebtn'),
+    fwd30: document.getElementById('30fwd'),
+    bwd30: document.getElementById('30bwd'),
+    reconnect: document.getElementById('reconnect'),
+    gofull: document.getElementById('fullscreenbtn')
 }
 const JoinBtn = document.getElementById('joinbutton');
 const intro = document.getElementById('intro');
@@ -19,19 +19,18 @@ const mediaInfo = {
     videoBR: document.querySelector('#videobitratePlaceholder'),
     audioBR: document.querySelector('#audiobitratePlaceholder')
 }
-const notifier = new AWN({position:"top-right"});
+const notifier = new AWN({position: "top-right"});
 let streamPlaybackState = false;
 window.onload = () => {
     mediacontrolButtons.playpause.onclick = () => {
         if (streamPlaybackState) {
             videoobj.pause();
-            mediacontrolButtons.playpause.children[0].innerText="play_arrow";
+            mediacontrolButtons.playpause.children[0].innerText = "play_arrow";
             streamPlaybackState = false;
-        }
-        else {
-                videoobj.play();
-                mediacontrolButtons.playpause.children[0].innerText="pause";
-                streamPlaybackState = true;
+        } else {
+            videoobj.play();
+            mediacontrolButtons.playpause.children[0].innerText = "pause";
+            streamPlaybackState = true;
         }
 
     }
@@ -56,15 +55,16 @@ window.onload = () => {
 
 
 }
-window.addEventListener("unhandledrejection", function(pre) {
-    notifier.alert(pre.reason.toString(),{
-        labels : {alert : "unhandled rejection"}
+window.addEventListener("unhandledrejection", function (pre) {
+    notifier.alert(pre.reason.toString(), {
+        labels: {alert: "unhandled rejection"}
     });
 });
+
 async function init() {
     const peer = createPeer();
-    peer.addTransceiver("video", { direction: "recvonly" });
-    peer.addTransceiver("audio", { direction: "recvonly" });
+    peer.addTransceiver("video", {direction: "recvonly"});
+    peer.addTransceiver("audio", {direction: "recvonly"});
 }
 
 function createPeer() {
@@ -76,10 +76,11 @@ function createPeer() {
             {urls: "stun:stun.nextcloud.com:443"}
         ]
     });
+
     peer.ontrack = handleTrackEvent;
-    peer.oniceconnectionstatechange = function(event) {
+    peer.oniceconnectionstatechange = function (event) {
         console.log(peer.iceConnectionState);
-      };
+    };
     peer.onnegotiationneeded = () => handleNegotiationNeededEvent(peer);
     setTimeout(() => {
         connectionloader.classList.add("hidden");
@@ -88,26 +89,32 @@ function createPeer() {
 }
 
 async function handleNegotiationNeededEvent(peer) {
+    for (let receiver in peer.getReceivers()) {
+        //peer.getReceivers()[receiver].playoutDelayHint = 5;
+        peer.getReceivers()[receiver].jitterBufferDelayHint  = 1;
+    }
+
     const offer = await peer.createOffer();
     await peer.setLocalDescription(offer);
     const payload = {
         sdp: peer.localDescription
     };
 
-    const { data } = await axios.post('/consumer', payload);
+    const {data} = await axios.post('/consumer', payload);
 
     console.log(data);
     if (data.isBroadcasting) {
         console.log(data.sdp.sdp)
-        mediaInfo.videoQuality.innerText= data.mediaOptions.videoOptions.videoQuality + 'p ' +  data.mediaOptions.videoOptions.videoFPS + 'FPS';
-        mediaInfo.videoBR.innerText= 'V: ' + data.mediaOptions.videoOptions.videoBitrate + 'Kbps';
-        mediaInfo.audioBR.innerText= 'A: ' + data.mediaOptions.audioOptions.audioBitrate + 'Kbps';
+        mediaInfo.videoQuality.innerText = data.mediaOptions.videoOptions.videoQuality + 'p ' + data.mediaOptions.videoOptions.videoFPS + 'FPS';
+        mediaInfo.videoBR.innerText = 'V: ' + data.mediaOptions.videoOptions.videoBitrate + 'Kbps';
+        mediaInfo.audioBR.innerText = 'A: ' + data.mediaOptions.audioOptions.audioBitrate + 'Kbps';
         const desc = new RTCSessionDescription(data.sdp);
         peer.setRemoteDescription(desc).catch(e => console.log(e));
-        peer.ondatachannel = (e) => { console.log(e) };
-    }
-    else {
-        notifier.warning('There is no broadcast running',{labels : {alert : "No Broadcast"}});
+        peer.ondatachannel = (e) => {
+            console.log(e)
+        };
+    } else {
+        notifier.warning('There is no broadcast running', {labels: {alert: "No Broadcast"}});
         JoinBtn.classList.remove("hidden");
         connectionloader.classList.add("hidden");
     }
@@ -115,21 +122,21 @@ async function handleNegotiationNeededEvent(peer) {
 
 function handleTrackEvent(e) {
     videoobj.srcObject = e.streams[0];
-    setTimeout(function() {
+    setTimeout(function () {
         btmbar.style.opacity = "0";
         headerbar.style.opacity = "0";
-    },2000);
-    btmbar.addEventListener('mouseleave',function() {
-        setTimeout(function() {
+    }, 2000);
+    btmbar.addEventListener('mouseleave', function () {
+        setTimeout(function () {
             btmbar.style.opacity = "0";
             headerbar.style.opacity = "0";
-        },2000)
+        }, 2000)
     });
-    btmbar.addEventListener('mouseenter',function() {
+    btmbar.addEventListener('mouseenter', function () {
         btmbar.style.opacity = "1";
         headerbar.style.opacity = "1";
     });
-    mediacontrolButtons.playpause.children[0].innerText="pause";
+    mediacontrolButtons.playpause.children[0].innerText = "pause";
     streamPlaybackState = true;
 }
 

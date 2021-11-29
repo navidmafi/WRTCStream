@@ -30,7 +30,19 @@
         <div class="connection">
 
             <form class="streamoptions px-2r py-2r brad-10" action="#" onsubmit="return startBroadcast(this)">
+                <div class="selector tc-white hidden">
+                    <div>
+                        <input type="radio" name="mediatype" id="displayMedia" checked>
+                        <label for="displayMedia">Display Media</label>
+                    </div>
+
+                    <div>
+                        <input type="radio" name="mediatype" id="userMedia">
+                        <label for="userMedia">User Media</label>
+                    </div>
+                </div>
                 <div class="selector wd-100pr">
+
                     <span class="tc-white">Video Quality : </span>
                     <select id="videoQuality" required>
                         <option value="" selected disabled hidden>Select Video Quality</option>

@@ -16,7 +16,6 @@ button,input[type=submit] {
   &:disabled {
     cursor: not-allowed;
     color: $Gray-90;
-    background-color: $Gray-30;
   }
 }
 /* Rules for sizing the icon. */
