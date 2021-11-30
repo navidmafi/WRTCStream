@@ -47,14 +47,14 @@ table, th, td {
   padding: 10px;
 }
 .hdrbar {
-  background-color: #00000095;
+  background-color: $Gray-50;
   position: absolute;
   top: 40px;
   left: 50%;
   transform: translate(-50%, -50%);
 }
 .toolsbtm {
-  background-color: #00000095;
+  background-color: $Gray-50;
   position: absolute;
   bottom: 5px;
   left: 50%;
@@ -76,7 +76,7 @@ table, th, td {
 }
 .streamoptions {
   width: 300px;
-  background-color: rgba($Gray-10,0.7);
+  background-color: $Gray-50;
   & .selector {
     display: flex;
     justify-content: space-between;

@@ -53,7 +53,7 @@ async function init(clientOptions, mediaOptions) {
     const peer = createPeer(clientOptions, mediaOptions);
     stream.getTracks().forEach(track => {
         track.onended = (track) => {
-
+            console.log(track,' ended');
         }
         peer.addTrack(track, stream);
     });

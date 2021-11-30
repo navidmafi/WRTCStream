@@ -20,6 +20,9 @@ const mediaInfo = {
     audioBR: document.querySelector('#audiobitratePlaceholder')
 }
 const notifier = new AWN({position: "top-right"});
+const footerStats = document.getElementById('footerstat');
+
+let lastResult;
 let streamPlaybackState = false;
 window.onload = () => {
     mediacontrolButtons.playpause.onclick = () => {
@@ -77,9 +80,40 @@ function createPeer() {
             {urls: "stun:stun.nextcloud.com:443"}
         ]
     });
+    window.setInterval(() => {
+        //TODO add audio est too
+        const sender = peer.getReceivers()[0];
+        console.log(peer.getSenders()[0])
+        sender.getStats().then(res => {
+            res.forEach(report => {
+                //console.log(report.type);
+                let bytes;
+                //let packets;
+                if (report.type === 'inbound-rtp') {
+                    if (report.isRemote) {
+                        console.log('isremote');
+                        return;
+                    }
+                    const now = report.timestamp;
+                    bytes = report.bytesSent;
+                    // packets = report.packetsSent;
+                    if (lastResult && lastResult.has(report.id)) {
+                        // calculate bitrate
+                        const bitrate = 8 * (bytes - lastResult.get(report.id).bytesSent) /
+                            (now - lastResult.get(report.id).timestamp);
 
+                        console.log(bitrate);
+                        footerStats.children[1].innerText='Current Bitrate : ' + Math.round(bitrate) + 'KB/s';
+                        footerStats.children[2].innerText='Usage Est. : ' + Math.round(8*bytes/1000) + 'KB';
+                    }
+                }
+            });
+            lastResult = res;
+        });
+    }, 2000);
     peer.ontrack = handleTrackEvent;
     peer.oniceconnectionstatechange = function (event) {
+        console.log(event);
         console.log(peer.iceConnectionState);
     };
     peer.onnegotiationneeded = () => handleNegotiationNeededEvent(peer);
@@ -103,9 +137,7 @@ async function handleNegotiationNeededEvent(peer) {
 
     const {data} = await axios.post('/api/consumer', payload);
 
-    console.log(data);
     if (data.isBroadcasting) {
-        console.log(data.sdp.sdp)
         mediaInfo.videoQuality.innerText = data.mediaOptions.videoOptions.videoQuality + 'p ' + data.mediaOptions.videoOptions.videoFPS + 'FPS';
         mediaInfo.videoBR.innerText = 'V: ' + data.mediaOptions.videoOptions.videoBitrate + 'Kbps';
         mediaInfo.audioBR.innerText = 'A: ' + data.mediaOptions.audioOptions.audioBitrate + 'Kbps';
@@ -115,7 +147,7 @@ async function handleNegotiationNeededEvent(peer) {
             console.log(e)
         };
     } else {
-        notifier.warning('There is no broadcast running', {labels: {alert: "No Broadcast"}});
+        notifier.warning('There is no broadcast running', {labels: {warning: "No Broadcast"}});
         JoinBtn.classList.remove("hidden");
         connectionloader.classList.add("hidden");
     }

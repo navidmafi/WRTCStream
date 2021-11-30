@@ -108,7 +108,7 @@ function handleTrackEvent(e, peer) {
     senderStream = e.streams[0];
     outputLog('status', 'Set senderStream OK')
     isBroadcasting = true;
-};
+}
 
 
 function setBandwidth(sdp, mediaOptions) {
@@ -135,8 +135,8 @@ function outputLog(type, text) {
     console.log(ftext);
 }
 
-function handleDisconnection() {
-    isBroadcasting = false;
-}
+// function handleDisconnection() {
+//     isBroadcasting = false;
+// }
 
 app.listen(5000, () => outputLog('status', 'Server Startup'));
