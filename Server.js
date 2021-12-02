@@ -31,9 +31,11 @@ app.post("/api/consumer", async ({body}, res) => {
     if (isBroadcasting) {
         const peer = new webrtc.RTCPeerConnection({
             iceServers: [
-                {
-                    urls: "stun:stun.easyvoip.com:3478"
-                }
+                {urls: "stun:stun1.l.google.com:19302"},
+                {urls: "stun:stun2.l.google.com:19302"},
+                {urls: "stun:stun3.l.google.com:19302"},
+                {urls: "stun:stun.nextcloud.com:443"}
+
             ]
         });
         const desc = new webrtc.RTCSessionDescription(setBandwidth(body.sdp, mediaOptions));

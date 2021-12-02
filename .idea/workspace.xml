@@ -1,10 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="fb98d35d-0441-4ca2-9e76-b1bdc5a42fbb" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+    <list default="true" id="fb98d35d-0441-4ca2-9e76-b1bdc5a42fbb" name="Changes" comment="Rls prep 1">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Server.js" beforeDir="false" afterPath="$PROJECT_DIR$/Server.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/assets/scripts/broadcaster.js" beforeDir="false" afterPath="$PROJECT_DIR$/assets/scripts/broadcaster.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/scripts/receiver.js" beforeDir="false" afterPath="$PROJECT_DIR$/assets/scripts/receiver.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/views/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/views/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/views/receiver.html" beforeDir="false" afterPath="$PROJECT_DIR$/views/receiver.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/views/videobroadcaster.html" beforeDir="false" afterPath="$PROJECT_DIR$/views/videobroadcaster.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -89,6 +93,7 @@
     <MESSAGE value="idk more stuff" />
     <MESSAGE value="starting for UI changes" />
     <MESSAGE value="webstorm stuff" />
-    <option name="LAST_COMMIT_MESSAGE" value="webstorm stuff" />
+    <MESSAGE value="Rls prep 1" />
+    <option name="LAST_COMMIT_MESSAGE" value="Rls prep 1" />
   </component>
 </project>

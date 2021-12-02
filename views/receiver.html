@@ -43,12 +43,12 @@
 
 <body class="nospacing">
 
-  <div id="intro" class="animation flex-both-center wd-100pr hidden">
+  <div id="intro" class="animation flex-both-center wd-100pr">
     <div class="patterns">
       <svg width="100vw" height="95%">
 
      <text x="50%" y="60%"  text-anchor="middle"  >
-       CloudConnect
+       JolStreamer
      </text>
      </svg>
     </div>
@@ -56,7 +56,7 @@
 
   <div class="text-center">
     <div class="hdrbar px-1r brad-10 py-05r trans-200" id="headerbar">
-      <h1 class="tc-white nospacing fw-400">Joltogether<span class="fs-10r fw-400">® v0.63 (Dev) </span> </h1>
+      <h1 class="tc-white nospacing fw-400">JolStreamer<span class="fs-10r fw-400">® 1.0 (End) </span> </h1>
     </div>
     <!--src="https://file-examples-com.github.io/uploads/2017/04/file_example_MP4_1280_10MG.mp4"-->
     <video autoplay id='video'></video><br>
@@ -88,17 +88,16 @@
     <button id="fullscreenbtn" class="noborder bg-none tc-white nospacing"><span class="material-icons md-36">aspect_ratio</span></button>
   </div>
   <footer class="nospacing text-center wd-100pr py-05r">
-    <div class="text-left " id="footerstat">
-      <span class="mx-05r">Not connected</span>
-      <span class="mx-05r">Bitrate : 0KB/s</span>
-      <span class="mx-05r">Usage est. : 0KB</span>
+    <div class="text-left" id="footerstat">
+      <span class="mx-05r"></span>
+
 
     </div>
     <div>
-      <span>This is a developer preview.</span>
+      <span>This is the last release of this project. <a class="tc-black" href="#" onclick="notifier.info('This project was supposed to be just an experiment for a larger project. And this was not going to be supported in the long run. Although this experiment will still be available for a while, we will not work on it anymore and will not provide support because we want to focus on our bigger projects. ',{labels: {info: 'Why'},durations : {info : 60000}})">Learn more</a></span>
     </div>
-    <div class="text-right hidden">
-      <span>This is a developer preview.</span>
+    <div class="text-right">
+      <span>NGINX 1.20 - NodeJS v16.13 </span>
     </div>
 
   </footer>

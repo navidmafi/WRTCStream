@@ -80,37 +80,7 @@ function createPeer() {
             {urls: "stun:stun.nextcloud.com:443"}
         ]
     });
-    window.setInterval(() => {
-        //TODO add audio est too
-        const sender = peer.getReceivers()[0];
-        console.log(peer.getSenders()[0])
-        sender.getStats().then(res => {
-            res.forEach(report => {
-                //console.log(report.type);
-                let bytes;
-                //let packets;
-                if (report.type === 'inbound-rtp') {
-                    if (report.isRemote) {
-                        console.log('isremote');
-                        return;
-                    }
-                    const now = report.timestamp;
-                    bytes = report.bytesSent;
-                    // packets = report.packetsSent;
-                    if (lastResult && lastResult.has(report.id)) {
-                        // calculate bitrate
-                        const bitrate = 8 * (bytes - lastResult.get(report.id).bytesSent) /
-                            (now - lastResult.get(report.id).timestamp);
 
-                        console.log(bitrate);
-                        footerStats.children[1].innerText='Current Bitrate : ' + Math.round(bitrate) + 'KB/s';
-                        footerStats.children[2].innerText='Usage Est. : ' + Math.round(8*bytes/1000) + 'KB';
-                    }
-                }
-            });
-            lastResult = res;
-        });
-    }, 2000);
     peer.ontrack = handleTrackEvent;
     peer.oniceconnectionstatechange = function (event) {
         console.log(event);

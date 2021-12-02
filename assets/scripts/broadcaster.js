@@ -5,6 +5,8 @@
 const startbtn = document.getElementById('start-stream');
 const connectionloader = document.getElementById('connectionloader');
 const notifier = new AWN({position: "top-right"});
+const intro = document.getElementById('intro');
+
 const tokenInput = document.getElementById('token');
 let lastResult;
 const clientStatus = {
@@ -14,7 +16,11 @@ const clientStatus = {
 }
 const footerStats = document.getElementById('footerstat');
 //TODO ROOM ID ON WINDOW.ONLOAD
-
+window.onload = () => {
+    setTimeout(() => {
+        intro.remove();
+    }, 4000);
+}
 function startBroadcast(form) {
     startbtn.disabled = true;
     connectionloader.classList.remove("hidden");
@@ -93,8 +99,8 @@ function createPeer(clientOptions, mediaOptions) {
                             (now - lastResult.get(report.id).timestamp);
 
                         // console.log(bitrate,now,now, packets - lastResult.get(report.id).packetsSent);
-                        footerStats.children[1].innerText='Current Bitrate : ' + Math.round(bitrate) + 'KB/s';
-                        clientStatus.usageEst += Math.round(bitrate * 2);
+                        footerStats.children[1].innerText='Avg Bitrate : ' + Math.round(bitrate) + 'KB/s';
+                        clientStatus.usageEst += Math.round(bitrate);
                         footerStats.children[2].innerText='Usage Est. : ' + Math.round(8*bytes/1000) + 'KB';
                     }
                 }
